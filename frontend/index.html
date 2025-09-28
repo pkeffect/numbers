@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Storage System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .api-test { background: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🥧 Pi Storage System</h1>
+        <p>Your Pi storage API is running!</p>
+        
+        <div class="api-test">
+            <h3>API Endpoints:</h3>
+            <ul>
+                <li><a href="http://localhost:8000/docs" target="_blank">📚 API Documentation</a></li>
+                <li><a href="http://localhost:8000/health" target="_blank">❤️ Health Check</a></li>
+                <li><a href="http://localhost:8000/digits?start=0&length=50" target="_blank">🔢 First 50 digits</a></li>
+            </ul>
+        </div>
+        
+        <div class="api-test">
+            <h3>Optional Services:</h3>
+            <ul>
+                <li><a href="http://localhost:8080" target="_blank">🗄️ SQLite Browser</a> (Run with: <code>docker-compose --profile debug up</code>)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
