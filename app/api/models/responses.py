@@ -35,10 +35,21 @@ class StatsResponse(BaseModel):
 
 
 class HealthResponse(BaseModel):
-    """Response model for health check"""
+    """Response model for health check - DEPRECATED, use MultiConstantHealthResponse"""
     status: str = Field(..., description="Overall system status")
     sources_available: Dict[str, bool] = Field(..., description="Availability of each storage source")
     last_verification: str = Field(..., description="Timestamp of last verification")
+
+
+class MultiConstantHealthResponse(BaseModel):
+    """Enhanced health response for multi-constant system"""
+    status: str = Field(..., description="Overall system status (healthy/degraded/unhealthy)")
+    total_constants: int = Field(..., description="Total number of available constants")
+    cached_constants: int = Field(..., description="Number of constants with complete caches")
+    constants_status: Dict[str, bool] = Field(..., description="Cache status for each constant (True=cached)")
+    available_constants: List[str] = Field(..., description="List of available constant IDs")
+    last_verification: str = Field(..., description="Timestamp of last verification")
+    test_passed: bool = Field(..., description="Whether basic functionality test passed")
 
 
 class CacheBuildResponse(BaseModel):
@@ -46,6 +57,34 @@ class CacheBuildResponse(BaseModel):
     message: str = Field(..., description="Status message")
     status: str = Field(..., description="Operation status")
     estimated_time_minutes: int = Field(..., description="Estimated time to completion in minutes")
+
+
+class CacheBuildResult(BaseModel):
+    """Individual cache build result"""
+    constant: str = Field(..., description="Constant ID")
+    name: str = Field(..., description="Full name of the constant")
+    status: str = Field(..., description="Build status (success/skipped/failed)")
+    reason: Optional[str] = Field(None, description="Reason for skip or failure")
+    cached_digits: Optional[int] = Field(None, description="Number of digits cached")
+    cache_complete: Optional[bool] = Field(None, description="Whether cache is complete")
+    error: Optional[str] = Field(None, description="Error message if failed")
+
+
+class BulkCacheBuildResponse(BaseModel):
+    """Response model for bulk cache building"""
+    message: str = Field(..., description="Overall status message")
+    status: str = Field(..., description="Operation status")
+    total_constants: int = Field(..., description="Total number of constants to process")
+    constants: List[str] = Field(..., description="List of constant IDs being processed")
+    force_rebuild: bool = Field(..., description="Whether forcing rebuild of existing caches")
+    estimated_time_minutes: int = Field(..., description="Estimated total time in minutes")
+
+
+class BulkCacheBuildResultResponse(BaseModel):
+    """Response model for completed bulk cache build"""
+    results: List[CacheBuildResult] = Field(..., description="Individual results for each constant")
+    summary: Dict[str, int] = Field(..., description="Summary counts (success/skipped/failed)")
+    total_processed: int = Field(..., description="Total number of constants processed")
 
 
 class VerificationResult(BaseModel):
@@ -95,17 +134,36 @@ class InfoResponse(BaseModel):
 
 class ConstantInfo(BaseModel):
     """Information about a mathematical constant"""
+    constant_id: str = Field(..., description="Unique identifier for the constant")
     name: str = Field(..., description="Full name of the constant")
     symbol: str = Field(..., description="Mathematical symbol")
     description: str = Field(..., description="Brief description")
     filename: str = Field(..., description="Data filename")
     available: bool = Field(..., description="Whether constant data is available")
+    file_exists: bool = Field(..., description="Whether the file exists")
+    cached: bool = Field(..., description="Whether cache has been built")
 
 
 class ConstantsListResponse(BaseModel):
     """Response model for listing available constants"""
     constants: List[ConstantInfo] = Field(..., description="List of available mathematical constants")
     total_count: int = Field(..., description="Total number of constants")
+    available_count: int = Field(..., description="Number of available constants")
+    cached_count: int = Field(..., description="Number of cached constants")
+
+
+class ConstantStatusResponse(BaseModel):
+    """Detailed status response for a specific constant"""
+    constant_id: str = Field(..., description="Constant identifier")
+    name: str = Field(..., description="Full name")
+    symbol: str = Field(..., description="Mathematical symbol")
+    file_exists: bool = Field(..., description="Whether data file exists")
+    file_path: str = Field(..., description="Path to data file")
+    file_size_bytes: int = Field(..., description="Size of data file in bytes")
+    cache_exists: bool = Field(..., description="Whether cache database exists")
+    cache_complete: bool = Field(..., description="Whether cache covers entire file")
+    cached_digits: int = Field(..., description="Number of digits in cache")
+    available: bool = Field(..., description="Whether constant is initialized and ready")
 
 
 class SystemStatsResponse(BaseModel):
