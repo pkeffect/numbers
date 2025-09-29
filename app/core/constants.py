@@ -32,20 +32,21 @@ MATH_CONSTANTS: Dict[str, MathConstant] = {
         known_prefix="27182818284590452353602874713526624977572470936999",
         filename="e_digits.txt"
     ),
+    "eulers": MathConstant(
         name="Euler-Mascheroni",
         symbol="γ",
         description="Euler-Mascheroni constant",
         known_prefix="57721566490153286060651209008240243104215933593992",
         filename="eulers_digits.txt"
     ),
-    "eulers": MathConstant(
+    "lemniscate": MathConstant(
         name="Lemniscate",
         symbol="ϖ",
         description="Lemniscate constant",
         known_prefix="26205830904531276522748574649951968533133071993113",
         filename="lemniscate_digits.txt"
     ),
-    "lemniscate": MathConstant(
+    "log10": MathConstant(
         name="Natural log of 10",
         symbol="ln(10)",
         description="Natural logarithm of 10",

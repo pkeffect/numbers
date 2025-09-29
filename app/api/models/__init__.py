@@ -1,9 +1,20 @@
 """
-API Layer
+API Models
 
-FastAPI endpoints and models for accessing mathematical constants.
-Provides RESTful interface with automatic documentation and validation.
+Pydantic models for request and response validation.
 """
+
+from app.api.models.requests import (
+    DigitsRequest,
+    SearchRequest,
+    StatsRequest,
+    RandomDigitsRequest,
+    VerificationRequest,
+    BulkDigitsRequest,
+    CacheBuildRequest,
+    PatternSearchRequest,
+    ConfigUpdateRequest,
+)
 
 from app.api.models.responses import (
     DigitsResponse,
@@ -20,22 +31,21 @@ from app.api.models.responses import (
     SystemStatsResponse,
     BulkDigitsResponse,
 )
-from app.api.models.requests import (
-    DigitsRequest,
-    SearchRequest,
-    StatsRequest,
-    RandomDigitsRequest,
-    VerificationRequest,
-    BulkDigitsRequest,
-    CacheBuildRequest,
-    PatternSearchRequest,
-    ConfigUpdateRequest,
-)
 
 __all__ = [
+    # Request models
+    "DigitsRequest",
+    "SearchRequest",
+    "StatsRequest",
+    "RandomDigitsRequest",
+    "VerificationRequest",
+    "BulkDigitsRequest",
+    "CacheBuildRequest",
+    "PatternSearchRequest",
+    "ConfigUpdateRequest",
     # Response models
     "DigitsResponse",
-    "SearchResult", 
+    "SearchResult",
     "StatsResponse",
     "HealthResponse",
     "CacheBuildResponse",
@@ -47,14 +57,4 @@ __all__ = [
     "ConstantsListResponse",
     "SystemStatsResponse",
     "BulkDigitsResponse",
-    # Request models
-    "DigitsRequest",
-    "SearchRequest",
-    "StatsRequest",
-    "RandomDigitsRequest",
-    "VerificationRequest",
-    "BulkDigitsRequest",
-    "CacheBuildRequest",
-    "PatternSearchRequest",
-    "ConfigUpdateRequest",
 ]

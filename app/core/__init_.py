@@ -11,6 +11,14 @@ from app.core.exceptions import (
     StorageError,
     ValidationError,
     MathConstantError,
+    FileNotFoundError,
+    ConfigurationError,
+    CacheError,
+    VerificationError,
+    APIError,
+    RateLimitError,
+    AuthenticationError,
+    AuthorizationError,
 )
 
 __all__ = [
@@ -21,4 +29,12 @@ __all__ = [
     "StorageError",
     "ValidationError",
     "MathConstantError",
+    "FileNotFoundError",
+    "ConfigurationError",
+    "CacheError",
+    "VerificationError",
+    "APIError",
+    "RateLimitError",
+    "AuthenticationError",
+    "AuthorizationError",
 ]
