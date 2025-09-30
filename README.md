@@ -10,7 +10,8 @@
 > - Contact research institutions that maintain these datasets
 > 
 > **Expected file format:**
-> - Plain text files containing only digits (no decimal points, spaces, or formatting)
+> - Plain text files containing digits (the system handles both formatted and unformatted)
+> - **Supported formats:** With or without decimal points, spaces, and newlines (automatically cleaned)
 > - Named according to convention: `pi_digits.txt`, `e_digits.txt`, etc.
 > - Place in the `data/` directory before starting the system
 > 
@@ -39,6 +40,7 @@ High-performance, triple-redundancy storage system for accessing billions of dig
 # Clone the repository
 git clone https://github.com/pkeffect/numbers
 cd numbers
+
 # Copy environment configuration
 cp .env.example .env
 
@@ -454,17 +456,22 @@ Contact these institutions that maintain large mathematical constant databases:
 
 #### File Format Requirements
 
-**Critical:** Files must be in the correct format:
+**Good news:** The system automatically handles multiple formats!
 
 ```
-✅ Correct format:
-31415926535897932384626433832795...
-
-❌ Incorrect formats:
-3.1415926535897...  (contains decimal point)
-3 1 4 1 5 9 2 6...  (contains spaces)
-3.141592653589793\n2384626433...  (contains newlines)
+✅ All these formats work (automatically cleaned):
+3.1415926535897932384626433832795...  (with decimal point)
+31415926535897932384626433832795...   (without decimal point)
+3 1 4 1 5 9 2 6 5 3 5 8 9 7...        (with spaces)
+3141592653589793
+2384626433832795...                   (with newlines)
+3.141 592 653 589 793...              (mixed formatting)
 ```
+
+**How it works:**
+- System automatically removes: decimal points (`.`), spaces, newlines (`\n`), carriage returns (`\r`)
+- Only digits (0-9) are retained for storage and computation
+- Original file is never modified - cleaning happens in memory
 
 **Validation script:**
 ```python
@@ -473,13 +480,18 @@ def validate_constant_file(filepath):
     with open(filepath, 'r') as f:
         content = f.read()
     
-    # Check for invalid characters
-    if not content.isdigit():
-        invalid = set(content) - set('0123456789')
+    # Clean content (same as system does)
+    cleaned = content.replace('.', '').replace(' ', '').replace('\n', '').replace('\r', '')
+    
+    # Check for invalid characters after cleaning
+    if not cleaned.isdigit():
+        invalid = set(cleaned) - set('0123456789')
         print(f"❌ Invalid characters found: {invalid}")
         return False
     
-    print(f"✅ Valid format: {len(content):,} digits")
+    print(f"✅ Valid format: {len(cleaned):,} digits")
+    print(f"   Original file size: {len(content):,} characters")
+    print(f"   After cleaning: {len(cleaned):,} digits")
     return True
 
 # Test your files
