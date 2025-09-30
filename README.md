@@ -1,5 +1,21 @@
 # 🔢 Math Constants Storage System
 
+> **⚠️ IMPORTANT: DATA FILES NOT INCLUDED**
+> 
+> This repository contains the API and storage infrastructure **only**. The mathematical constant data files (billions of digits) are **NOT included** due to their large size (multiple GB per constant).
+> 
+> **You must obtain these data files separately:**
+> - Download from mathematical constant databases (e.g., [Archive.org](https://archive.org), university repositories)
+> - Generate them yourself using high-precision computation tools
+> - Contact research institutions that maintain these datasets
+> 
+> **Expected file format:**
+> - Plain text files containing only digits (no decimal points, spaces, or formatting)
+> - Named according to convention: `pi_digits.txt`, `e_digits.txt`, etc.
+> - Place in the `data/` directory before starting the system
+> 
+> **We are exploring options for hosting these datasets** and will update this notice when publicly accessible sources become available. See [Data Sources](#-data-sources) section below for more information.
+
 High-performance, triple-redundancy storage system for accessing billions of digits of mathematical constants (π, φ, e, √2, and more) with FastAPI backend, dedicated endpoints per constant, and accuracy-first design.
 
 ## ✨ Features
@@ -17,6 +33,8 @@ High-performance, triple-redundancy storage system for accessing billions of dig
 
 ## 🚀 Quick Start
 
+> **⚠️ Prerequisites:** You must have the mathematical constant data files before proceeding. See the [Data Sources](#-data-sources) section below.
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -26,10 +44,14 @@ cd math-constants-storage
 cp .env.example .env
 
 # Place your math constant files in data/ directory
-# Expected filenames: pi_digits.txt, e_digits.txt, phi_digits.txt, etc.
+# Required filenames: pi_digits.txt, e_digits.txt, phi_digits.txt, etc.
+# Files should contain only digits (no decimal points or formatting)
 
 # Start the development environment
 docker-compose up --build
+
+# Build caches (after first startup)
+curl -X POST http://localhost:8000/admin/build-all-caches
 ```
 
 ## 📊 Supported Mathematical Constants
@@ -361,6 +383,122 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - 🐛 [Issue Tracker](https://github.com/your-repo/issues)
 - 💬 [Discussions](https://github.com/your-repo/discussions)
 - 📧 [Email Support](mailto:support@mathconstants.dev)
+
+## 📁 Data Sources
+
+### Where to Get Mathematical Constant Data Files
+
+Since the data files are not included in this repository, here are recommended sources:
+
+#### Option 1: Download Pre-Computed Files
+
+**Pi (π):**
+- [Archive.org - Pi to 1 Trillion Digits](https://archive.org/details/pi_digits)
+- [Numbers API](http://www.numberworld.org/digits/Pi/)
+- [University of Tokyo - Pi Database](http://www.super-computing.org/)
+
+**Euler's Number (e):**
+- [Archive.org - E Digits](https://archive.org/search.php?query=euler%20number%20digits)
+- [Mathematical Constants Database](http://www.plouffe.fr/simon/constants/)
+
+**Golden Ratio (φ):**
+- [Wolfram MathWorld Resources](https://mathworld.wolfram.com/GoldenRatio.html)
+- [OEIS - Online Encyclopedia of Integer Sequences](https://oeis.org/)
+
+**Square Roots and Other Constants:**
+- [Inverse Symbolic Calculator](http://wayback.cecm.sfu.ca/projects/ISC/ISCmain.html)
+- [Mathematical Constants Repository](http://www.plouffe.fr/)
+
+#### Option 2: Generate Files Yourself
+
+Use high-precision mathematical libraries:
+
+**Python (mpmath):**
+```python
+from mpmath import mp
+mp.dps = 1000000  # Set precision to 1 million digits
+
+# Generate Pi
+pi_digits = str(mp.pi).replace('.', '')
+with open('pi_digits.txt', 'w') as f:
+    f.write(pi_digits)
+
+# Generate e
+e_digits = str(mp.e).replace('.', '')
+with open('e_digits.txt', 'w') as f:
+    f.write(e_digits)
+
+# Generate phi (Golden Ratio)
+phi_digits = str(mp.phi).replace('.', '')
+with open('phi_digits.txt', 'w') as f:
+    f.write(phi_digits)
+```
+
+**Mathematica:**
+```mathematica
+(* Export 1 billion digits of Pi *)
+Export["pi_digits.txt", StringReplace[ToString[N[Pi, 1000000000]], "." -> ""], "Text"]
+```
+
+**y-cruncher (Fastest):**
+- [y-cruncher Download](http://www.numberworld.org/y-cruncher/)
+- Can compute billions/trillions of digits
+- Optimized for multi-core processors
+
+#### Option 3: Request from Research Institutions
+
+Contact these institutions that maintain large mathematical constant databases:
+- Stanford University Mathematics Department
+- University of Tokyo Supercomputing Center
+- CERN Computing Division
+- Max Planck Institute for Mathematics
+
+#### File Format Requirements
+
+**Critical:** Files must be in the correct format:
+
+```
+✅ Correct format:
+31415926535897932384626433832795...
+
+❌ Incorrect formats:
+3.1415926535897...  (contains decimal point)
+3 1 4 1 5 9 2 6...  (contains spaces)
+3.141592653589793\n2384626433...  (contains newlines)
+```
+
+**Validation script:**
+```python
+def validate_constant_file(filepath):
+    """Validate mathematical constant file format"""
+    with open(filepath, 'r') as f:
+        content = f.read()
+    
+    # Check for invalid characters
+    if not content.isdigit():
+        invalid = set(content) - set('0123456789')
+        print(f"❌ Invalid characters found: {invalid}")
+        return False
+    
+    print(f"✅ Valid format: {len(content):,} digits")
+    return True
+
+# Test your files
+validate_constant_file('data/pi_digits.txt')
+```
+
+### Hosting Plans (Coming Soon)
+
+We are currently exploring options to host pre-processed datasets:
+
+- **Option A:** Cloud storage (AWS S3, Google Cloud Storage)
+- **Option B:** Academic partnerships for direct downloads
+- **Option C:** Torrent distribution for large files
+- **Option D:** CDN-backed public repository
+
+**Status:** In planning phase. Follow [GitHub Discussions](https://github.com/your-repo/discussions) for updates.
+
+**Want to help?** If you have access to hosting resources or mathematical constant datasets, please reach out via [GitHub Issues](https://github.com/your-repo/issues).
 
 ---
 
