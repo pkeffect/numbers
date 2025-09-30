@@ -37,9 +37,8 @@ High-performance, triple-redundancy storage system for accessing billions of dig
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd math-constants-storage
-
+git clone https://github.com/pkeffect/numbers
+cd numbers
 # Copy environment configuration
 cp .env.example .env
 
